@@ -153,3 +153,5 @@ src/Razor/benchmarks/Microsoft.AspNetCore.Razor.Microbenchmarks/BenchmarkDotNet.
 src/Razor/test/testapps/ComponentApp/Components/Pages/Generated.razor
 /source_code/Output/WebServer/Publish
 /source_code/WebServer/Properties/PublishProfiles
+/source_code/WebServer/appsettings.json
+/source_code/WebServer/appsettings.json
