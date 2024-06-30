@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.10.34928.147
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebServer", "WebServer\WebServer.csproj", "{990EAC47-CEDD-4ECE-B718-1692C65E179D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebServer", "WebServer\WebServer.csproj", "{990EAC47-CEDD-4ECE-B718-1692C65E179D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Armpit.Library", "Armpit.Library\Armpit.Library.csproj", "{73B1366C-F2BB-4BB7-AA29-8936264D3B22}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Armpit.Library", "Armpit.Library\Armpit.Library.csproj", "{73B1366C-F2BB-4BB7-AA29-8936264D3B22}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

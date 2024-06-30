@@ -1,0 +1,33 @@
+﻿@page
+@model WebServer.Pages.Account.LoginModel
+@{
+    ViewData["Title"] = "Login";
+}
+<div class="container border" style="padding: 20px">
+    <form method="post">
+        <div class="text-danger" asp-validation-summary="ModelOnly"></div>
+        <div class="form-group row mb-1">
+            <div class="col-2 d-flex align-items-center">
+                <label asp-for="Credentials.Username"></label>
+            </div>
+            <div class="col-5">
+                <input type="text" class="form-control" asp-for="Credentials.Username" />
+            </div>
+            <span class="text-danger col-5" asp-validation-for="Credentials.Username"></span>
+        </div>
+        <div class="form-group row mb-1">
+            <div class="col-2 d-flex align-items-center">
+                <label asp-for="Credentials.Password"></label>
+            </div>
+            <div class="col-5">
+                <input type="text" class="form-control" asp-for="Credentials.Password" />
+            </div>
+            <span class="text-danger col-5" asp-validation-for="Credentials.Password"></span>
+        </div>
+        <div class="form-group row">
+            <div class="col-2 offset-2">
+                <input type="submit" class="btn btn-primary btn-logout" value="Login" />
+            </div>
+        </div>
+    </form>
+</div>
