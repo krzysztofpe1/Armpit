@@ -22,7 +22,7 @@ body {
     margin-bottom: 60px;
 }
 
-.header {
+header {
     margin: 0;
     display: flex;
     justify-content: space-between;
@@ -82,4 +82,20 @@ body {
 
     .btn-logout:hover {
         background-color: #e8b16f;
+    }
+
+footer {
+    background-color: #ffd29c;
+    color: saddlebrown;
+    padding-left: 20px;
+}
+
+footer a {
+    text-decoration: none;
+    color: #b36025;
+}
+
+    footer a:hover {
+        text-decoration: none;
+        color: #e07b34;
     }
