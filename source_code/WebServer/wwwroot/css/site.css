@@ -20,6 +20,11 @@ html {
 
 body {
     margin-bottom: 60px;
+    /*background-color: #fffaf7;*/
+}
+
+.content {
+    margin-top: 30px;
 }
 
 header {
@@ -69,7 +74,9 @@ header {
         font-size: 18px;
     }
 
-.btn-logout {
+.btn-login-logout {
+    width: 65px;
+    text-align: center;
     background-color: #ffd4a1;
     border: 2px solid #ff8c00;
     border-radius: 4px;
@@ -78,10 +85,13 @@ header {
     -o-transition: all .1s ease-in;
     -webkit-transition: all .1s ease-in;
     transition: all .1s ease-in;
+    text-decoration: none;
+    color: inherit;
 }
 
-    .btn-logout:hover {
+    .btn-login-logout:hover {
         background-color: #e8b16f;
+        color: inherit;
     }
 
 footer {
@@ -90,12 +100,29 @@ footer {
     padding-left: 20px;
 }
 
-footer a {
-    text-decoration: none;
-    color: #b36025;
+    footer a {
+        text-decoration: none;
+        color: #b36025;
+    }
+
+        footer a:hover {
+            text-decoration: none;
+            color: #e07b34;
+        }
+
+.input-text {
+    background-color: beige;
 }
 
-    footer a:hover {
-        text-decoration: none;
-        color: #e07b34;
+    .input-text::selection {
+        background-color: red;
     }
+
+.form-control {
+    background-color: #fffaf7;
+}
+
+.form-control:focus {
+    border-color: #ff8c00;
+    box-shadow: 0 0 0 0.2rem #ffd4a1;
+}

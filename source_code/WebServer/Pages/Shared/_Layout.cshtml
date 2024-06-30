@@ -1,4 +1,5 @@
-﻿<!DOCTYPE html>
+﻿@using Armpit.Library.Utils
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -7,7 +8,7 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/WebServer.styles.css" asp-append-version="true" />
-    <link rel="icon" href="~/css/logo.png" asp-append-version="true"/>
+    <link rel="icon" href="~/css/logo.png" asp-append-version="true" />
     @await RenderSectionAsync("Styles", required: false)
 </head>
 <body>
@@ -17,16 +18,20 @@
             <a asp-action="/" class="header-title">Armpit</a>
         </div>
         <div class="header-right">
-            <span>Logged in as: <!--@User.Identity.Name--></span>
-            <form method="post" asp-page-handler="Logout">
-                <button type="submit" class="btn-logout">Logout</button>
-            </form>
+            @if (!User.Identity.Name.IsNullOrEmpty())
+            {
+                <span>Logged in as: @User.Identity.Name</span>
+                <a href="/Account/Logout" class="btn-login-logout">Logout</a>
+            }
+            else
+            {
+                <a href="/Account/Login" class="btn-login-logout">Login</a>
+            }
+
         </div>
     </header>
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
+    <div class="content">
+        @RenderBody()
     </div>
 
     <footer class="border-top footer">
