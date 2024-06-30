@@ -1,12 +1,14 @@
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace WebServer.Pages.Account
+namespace WebServer.Pages.Account;
+
+public class LogoutModel : PageModel
 {
-    public class LogoutModel : PageModel
+    public async Task<IActionResult> OnGet()
     {
-        public void OnGet()
-        {
-        }
+        await HttpContext.SignOutAsync();
+        return Redirect("/Account/Login");
     }
 }
