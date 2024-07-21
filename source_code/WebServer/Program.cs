@@ -1,3 +1,4 @@
+using Armpit.Library;
 using Armpit.Library.MetricsManagers.Managers;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
@@ -14,8 +15,6 @@ namespace WebServer
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            builder.WebHost.UseUrls("http://*:5000");
-
             await ConfigureServices(builder.Services, builder.Configuration);
 
             var app = builder.Build();
@@ -26,6 +25,8 @@ namespace WebServer
                 app.UseExceptionHandler("/Error");
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
+
+                builder.WebHost.UseUrls("http://*:5000");
             }
 
             //app.UseHttpsRedirection();
@@ -45,6 +46,7 @@ namespace WebServer
             });
 
             app.MapRazorPages();
+            app.MapControllers();
 
             app.Run();
         }
@@ -68,6 +70,8 @@ namespace WebServer
                     options.LoginPath = "/Account/Login";
                 });
 
+            services.AddControllers();
+
             // Authentication database
             var authDbConnectionString = configurationManager.GetConnectionString("MSSQL_Auth");
             services.AddDbContext<ArmpitAuthDbContext>(options => options.UseSqlServer(authDbConnectionString, o=>o.UseCompatibilityLevel(110)));
@@ -76,6 +80,7 @@ namespace WebServer
             await authDbContext.Database.EnsureCreatedAsync();
             
             services.AddScoped<AccountRepository>();
+            services.AddScoped<SystemResourceMonitor>();
 
             if (authDbContext.Accounts.Count() == 0)
             {

@@ -9,14 +9,14 @@ public class MemoryMetricsManager : MetricsManagerPlatformDivisionBase<MemoryMet
     {
         var output = "";
 
-        var info = new ProcessStartInfo
+        var memoryInfo = new ProcessStartInfo
         {
             FileName = "/bin/bash",
             Arguments = "-c \"free -m\"",
             RedirectStandardOutput = true
         };
 
-        using (var process = Process.Start(info))
+        using (var process = Process.Start(memoryInfo))
         {
             output = await process.StandardOutput.ReadToEndAsync();
             await process.WaitForExitAsync();
@@ -24,12 +24,15 @@ public class MemoryMetricsManager : MetricsManagerPlatformDivisionBase<MemoryMet
 
         var lines = output.Split("\n");
         var memory = lines[1].Split(" ", StringSplitOptions.RemoveEmptyEntries);
+        var swap = lines[2].Split(" ", StringSplitOptions.RemoveEmptyEntries);
 
         var metrics = new MemoryMetrics
         {
-            Total = double.Parse(memory[1]),
-            Used = double.Parse(memory[2]),
-            Free = double.Parse(memory[3])
+            Total = int.Parse(memory[1]),
+            Used = int.Parse(memory[2]),
+            Cached = int.Parse(memory[5]),
+            SwapTotal = int.Parse(swap[1]),
+            SwapUsed = int.Parse(swap[2])
         };
 
         return metrics;
@@ -37,32 +40,48 @@ public class MemoryMetricsManager : MetricsManagerPlatformDivisionBase<MemoryMet
 
     protected override async Task<MemoryMetrics> GetWindowsMetricsAsync()
     {
-        var output = "";
+        var output = await ExecuteWmicCommandAsync("OS get FreePhysicalMemory,TotalVisibleMemorySize /Value");
+        var lines = output.Trim().Split("\n", StringSplitOptions.RemoveEmptyEntries);
+        var freeMemory = int.Parse(lines[0].Split("=", StringSplitOptions.RemoveEmptyEntries)[1].Trim());
+        var totalMemory = int.Parse(lines[1].Split("=", StringSplitOptions.RemoveEmptyEntries)[1].Trim());
 
+        var swapOutput = await ExecuteWmicCommandAsync("PageFile get AllocatedBaseSize,CurrentUsage /Value");
+        var swapLines = swapOutput.Trim().Split("\n", StringSplitOptions.RemoveEmptyEntries);
+        var swapTotal = int.Parse(swapLines[0].Split("=", StringSplitOptions.RemoveEmptyEntries)[1].Trim());
+        var swapUsed = int.Parse(swapLines[1].Split("=", StringSplitOptions.RemoveEmptyEntries)[1].Trim());
+
+        var cachedOutput = await ExecuteWmicCommandAsync("OS get FreeSpaceInPagingFiles,SizeStoredInPagingFiles /Value");
+        var cachedLines = cachedOutput.Trim().Split("\n", StringSplitOptions.RemoveEmptyEntries);
+        var cachedMemory = int.Parse(cachedLines[0].Split("=", StringSplitOptions.RemoveEmptyEntries)[1].Trim());
+
+        var metrics = new MemoryMetrics
+        {
+            Total = totalMemory/1024,
+            Used = (totalMemory - freeMemory)/1024,
+            Cached = cachedMemory/1024,
+            SwapTotal = swapTotal,
+            SwapUsed = swapUsed
+        };
+
+        return metrics;
+    }
+
+    private async Task<string> ExecuteWmicCommandAsync(string arguments)
+    {
         var info = new ProcessStartInfo
         {
             FileName = "wmic",
-            Arguments = "OS get FreePhysicalMemory,TotalVisibleMemorySize /Value",
-            RedirectStandardOutput = true
+            Arguments = arguments,
+            RedirectStandardOutput = true,
+            UseShellExecute = false,
+            CreateNoWindow = true
         };
 
         using (var process = Process.Start(info))
         {
-            output = await process.StandardOutput.ReadToEndAsync();
+            var output = await process.StandardOutput.ReadToEndAsync();
             await process.WaitForExitAsync();
+            return output;
         }
-
-        var lines = output.Trim().Split("\n");
-        var freeMemoryParts = lines[0].Split("=", StringSplitOptions.RemoveEmptyEntries);
-        var totalMemoryParts = lines[1].Split("=", StringSplitOptions.RemoveEmptyEntries);
-
-        var metrics = new MemoryMetrics
-        {
-            Total = Math.Round(double.Parse(totalMemoryParts[1]) / 1024, 0),
-            Free = Math.Round(double.Parse(freeMemoryParts[1]) / 1024, 0)
-        };
-        metrics.Used = metrics.Total - metrics.Free;
-
-        return metrics;
     }
 }

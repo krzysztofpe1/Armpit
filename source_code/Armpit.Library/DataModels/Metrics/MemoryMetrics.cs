@@ -1,8 +1,13 @@
 ﻿namespace Armpit.Library.DataModels.Metrics;
 
+/// <summary>
+/// Every metric associated with memory size is in MB
+/// </summary>
 public class MemoryMetrics : IMetrics
 {
-    public double Total;
-    public double Used;
-    public double Free;
+    public int Total { get; set; }
+    public int Used { get; set; }
+    public int Cached { get; set; }
+    public int SwapTotal { get; set; }
+    public int SwapUsed { get; set; }
 }

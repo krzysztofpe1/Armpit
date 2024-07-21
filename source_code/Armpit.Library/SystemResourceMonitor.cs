@@ -21,12 +21,13 @@ public class SystemResourceMonitor
 
     #region Public Methods
 
-    public float GetCurrentCpuUsage()
+    public async Task<CombinedMetrics> GetCombinedMetricsAsync()
     {
-        return 0;
+        return new CombinedMetrics
+        {
+            MemoryMetrics = await _memoryManager.GetMetricsAsync()
+        };
     }
-
-
 
     #endregion
 
